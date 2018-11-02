@@ -1,1 +1,284 @@
-testing todo page
+# Membuat Instance Client Server
+
+## Membuat Server
+
+1. Create Virtual Machine
+Name: Server Ubuntu
+Type: Linux
+Version: Ubuntu (64-bit)
+Memory size: 1024 MB
+Hard disk: Create a virtual hard disk now
+[Create]
+File location: Server Ubuntu
+File size: 10 GB
+Hard disk file type: VDI
+Storage on physical hard disk: Dynamical allocated
+[Create]
+
+2. Server Ubuntu - Settings (Klik kanan pada instance Server Ubuntu > Settings)
+System:
+    Boot Order: disable Floppy
+Storage:
+    Controller: IDE
+        ubuntu-18.04.1-live-server-amd64.iso (IDE Secondary Master)
+        [] Live CD/DVD
+Audio
+    [] Enable Audio
+Network
+    Adapter 1:
+    [v] Enable Network Adapter
+        Attached to: NAT
+    Adapter 2:
+    [v] Host-only Adapter
+        Name: vboxnet0
+[OK]
+
+3. Instalasi Ubuntu Server 18.04 LTS
+
+(1/11)
+Please choose your preferred language.
+English
+[ENTER]
+
+(2/11)
+Layout: English US
+Variant: English US
+Pilih "Done"
+[ENTER]
+
+(3/11)
+Pilih: Install Ubuntu
+[ENTER]
+
+(4/11)
+Network Connection:
+enp0s3 eth 10.0.2.15/24 (from dhcp)
+enp0s8 192.168.56.100/24 (static)
+
+Cara merubah enp0s8 menjadi static
+- Edit IPv4 [ENTER]
+- IPv4 Method = Manual [ENTER]
+    Subnet: 192.168.56.0/24
+    Address: 192.168.56.100
+    Gateway: 10.0.2.2
+    Pilih "Save"
+    [ENTER]
+
+Pilih "Done"
+[ENTER]
+
+(5/11)
+Pilih "Done"
+[ENTER]
+
+(6/11)
+Pilih "Done"
+[ENTER]
+
+(7/11)
+Filesystem setup:
+Pilih "Use An Entire Disk"
+[ENTER]
+
+Choose the disk to install to:
+Pilih "VBOX_HARDDISK_VBxxxxxxxx-xxxxxxxx"
+[ENTER]
+
+File System Summary
+Pilih "Done"
+[ENTER]
+
+Are you sure you want to continue?
+Pilih "continue"
+[ENTER]
+
+Profile setup:
+Your name: ubuntu
+Your server's name: ubuntu-server
+Pick a username: ubuntu
+Choose a password: ubuntu
+Confirm your password: ubuntu
+Import SSH identity: from GitHub (kalau punya)
+Pilih "Done"
+[ENTER]
+
+Featured Server Snaps:
+Pilih "Done"
+[ENTER]
+
+Tunggu proses instalasi hingga selesai
+
+Pilih "Reboot Now"
+[ENTER]
+
+Please remove the installation medium, then press ENTER:
+[ENTER]
+
+Login
+ubuntu-server login: ubuntu
+Password: ubuntu
+
+Check ip address interface
+$ ip a s
+
+Check ping ke google.com
+$ ping -c 3 google.com
+
+Check ping ke network vboxnet0
+$ ping -c 3 192.168.56.1
+
+Check ping ke host ip
+$ ping -c 3 192.168.56.3
+
+Lakukan juga pengecekan dari host ke ubuntu-server ip
+$ ping -c 3 192.168.56.100
+
+
+## Membuat Client
+
+
+# Management Users & Instalasi OwnCloud
+
+## Membuat User Baru pada Server
+
+referensi:
+https://www.digitalocean.com/community/tutorials/how-to-create-a-sudo-user-on-ubuntu-quickstart
+
+$ sudo adduser rizqi
+
+Enter new UNIX password: rizqi
+Retype new UNIX password: rizqi
+passwd: password updated successfully
+Changing the user information for rizqi
+Enter the new value, or press ENTER for the default
+    Full Name []:
+    Room Number []:
+    Work Phone []:
+    Home Phone []:
+    Other []:
+Is the information correct? [Y/n] Y
+
+$ sudo usermod -aG sudo rizqi
+
+Cek apakah rizqi sudah masuk group sudo dengan perintah,
+$ groups rizqi
+
+
+## Masuk Sebagai User Baru
+
+$ su - rizqi
+
+lakukan pengetesan sudo
+
+$ sudo ls -la /root
+
+
+## Memasang Web Server pada User Baru
+
+### Modifikasi Repository
+
+$ sudo vim /etc/apt/sources.list
+
+Tambahkan 'universe' pada setiap akhir baris repo
+
+deb http://kambing.ui.ac.id/ubuntu bionic main universe
+deb http://kambing.ui.ac.id/ubuntu bionic-security main universe
+deb http://kambing.ui.ac.id/ubuntu bionic-updates main universe
+
+### Instalasi Apache2
+
+referensi:
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04
+
+$ sudo apt update
+
+$ sudo apt install apache2 -y
+
+$ sudo apache2ctl configtest
+
+$ sudo systemctl restart apache2
+$ sudo systemctl status apache2
+
+exit dengan menekan tombol q
+
+Konfigurasi firewall (tidak perlu)
+
+$ sudo ufw app list
+
+$ sudo ufw app info "Apache Full"
+
+$ sudo ufw allow in "Apache Full"
+
+Buka di browser http://192.168.56.100
+Akan terbuka Default Page dari Apache2 Ubuntu
+
+
+### Instalasi PHP
+
+$ sudo apt install php libapache2-mod-php php-mysql php-bz2 php-curl php-gd php-imagick php-intl php-mbstring php-xml php-zip -y
+
+$ sudo systemctl restart apache2
+$ sudo systemctl status apache2
+
+
+### Instalasi MySQL
+
+$ sudo apt install mysql-server -y
+
+$ sudo mysql
+
+mysql> CREATE DATABASE owncloud;
+
+mysql> GRANT ALL ON owncloud.* to 'owncloud'@'localhost' IDENTIFIED BY 'owncloud';
+
+mysql> FLUSH PRIVILEGES;
+
+mysql> exit
+
+$ sudo apt install phpmyadmin
+
+Apabila keluar dialog dengan background pink pilih
+[*] Apache2
+<Yes>
+
+dbconfig-common?
+<Yes>
+
+## Memasang Cloud Apps pada User Baru (ownCloud)
+
+referensi:
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-owncloud-on-ubuntu-18-04
+
+$ curl https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/Release.key | sudo apt-key add -
+
+$ echo 'deb https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/owncloud.list
+
+$ sudo apt update
+
+Install ownCloud
+
+$ sudo apt install owncloud-files -y
+
+Periksa apakah ownCloud sudah berhasil diinstal
+
+$ sudo ls -la /var/www/owncloud
+
+Rubah DocumentRoot yang ada di /etc/apache2/sites-enabled/000-default.conf
+
+$ sudo sed -i 's/html/owncloud/g' /etc/apache2/sites-enabled/000-default.conf
+
+$ sudo apache2ctl configtest
+Syntax OK
+
+$ sudo systemctl restart apache2
+
+Buka browser http://192.168.56.100
+Maka akan terbuka tampilan ownCloud X
+Masukkan data-data yang diperlukan
+
+username: rizqi
+password: rizqi
+database user: owncloud
+database password: owncloud
+database name: owncloud
+localhost
