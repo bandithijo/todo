@@ -1,37 +1,37 @@
-<code>
-# Membuat Instance Client Server
-## Membuat Server
+# Membuat Instance Client Server<br><br>
 
-1. Create Virtual Machine
-Name: Server Ubuntu
-Type: Linux
-Version: Ubuntu (64-bit)
-Memory size: 1024 MB
-Hard disk: Create a virtual hard disk now
-[Create]
-File location: Server Ubuntu
-File size: 10 GB
-Hard disk file type: VDI
-Storage on physical hard disk: Dynamical allocated
-[Create]
+## Membuat Server<br><br>
 
-2. Server Ubuntu - Settings (Klik kanan pada instance Server Ubuntu > Settings)
-System:
-    Boot Order: disable Floppy
-Storage:
-    Controller: IDE
-        ubuntu-18.04.1-live-server-amd64.iso (IDE Secondary Master)
-        [] Live CD/DVD
-Audio
-    [] Enable Audio
-Network
-    Adapter 1:
-    [v] Enable Network Adapter
-        Attached to: NAT
-    Adapter 2:
-    [v] Host-only Adapter
-        Name: vboxnet0
-[OK]
+1. Create Virtual Machine<br>
+Name: Server Ubuntu<br>
+Type: Linux<br>
+Version: Ubuntu (64-bit)<br>
+Memory size: 1024 MB<br>
+Hard disk: Create a virtual hard disk now<br>
+[Create]<br>
+File location: Server Ubuntu<br>
+File size: 10 GB<br>
+Hard disk file type: VDI<br>
+Storage on physical hard disk: Dynamical allocated<br>
+[Create]<br><br>
+
+2. Server Ubuntu - Settings (Klik kanan pada instance Server Ubuntu > Settings)<br>
+System:<br>
+    Boot Order: disable Floppy<br>
+Storage:<br>
+    Controller: IDE<br>
+        ubuntu-18.04.1-live-server-amd64.iso (IDE Secondary Master)<br>
+        [] Live CD/DVD<br>
+Audio<br>
+    [] Enable Audio<br>
+Network<br>
+    Adapter 1:<br>
+    [v] Enable Network Adapter<br>
+        Attached to: NAT<br>
+    Adapter 2:<br>
+    [v] Host-only Adapter<br>
+        Name: vboxnet0<br>
+[OK]<br><br>
 
 3. Instalasi Ubuntu Server 18.04 LTS
 
@@ -282,4 +282,3 @@ database user: owncloud
 database password: owncloud
 database name: owncloud
 localhost
-</code>
