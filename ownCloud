@@ -1,284 +1,256 @@
-# Membuat Instance Client Server
+# TUGAS BESAR Cloud Computing
 
+Ini adalah manual script dari video youtube playlist https://goo.gl/Q9Y3nh
+
+[VIDEO PART 1]
 ## Membuat Server
+-------------------------------------------------------------------------------
+** Sebaiknya laptop kamu sudah terkoneksi ke Internet
 
-1. Create Virtual Machine
+Buat machine (instance) baru.
+Gunakan "Expert Mode"
 Name: Server Ubuntu
 Type: Linux
 Version: Ubuntu (64-bit)
-Memory size: 1024 MB
-Hard disk: Create a virtual hard disk now
-[Create]
+Memory Size: 1024 MB
+Klik tombol [Create]
+
 File location: Server Ubuntu
-File size: 10 GB
-Hard disk file type: VDI
-Storage on physical hard disk: Dynamical allocated
-[Create]
+File size: 10.00 GB
+Klik tombol [Create]
 
-2. Server Ubuntu - Settings (Klik kanan pada instance Server Ubuntu > Settings)
-System:
-    Boot Order: disable Floppy
-Storage:
-    Controller: IDE
-        ubuntu-18.04.1-live-server-amd64.iso (IDE Secondary Master)
-        [] Live CD/DVD
-Audio
-    [] Enable Audio
-Network
-    Adapter 1:
-    [v] Enable Network Adapter
-        Attached to: NAT
-    Adapter 2:
-    [v] Host-only Adapter
-        Name: vboxnet0
-[OK]
+Klik kanan pada instance Server Ubuntu, pilih Settings
 
-3. Instalasi Ubuntu Server 18.04 LTS
+Pilih tab Storage
+Pilih Empty
+Klik icon gambar CD
+Pilih "Choose Virtual Optical Disk File..."
+Cari iso/image "ubuntu-18.04.1-server-amd4.iso"
+Klik tombol [Open]
 
-(1/11)
-Please choose your preferred language.
-English
-[ENTER]
+Pilih tab Audio
+Uncentang Enable Audio
 
-(2/11)
-Layout: English US
-Variant: English US
-Pilih "Done"
-[ENTER]
+Pilih tab Network
+Enable Adapter 1
+Attached to: NAT
+Enable Adapter 2
+Attached to: Host-only Adapter
 
-(3/11)
-Pilih: Install Ubuntu
-[ENTER]
+Klik tombol [Ok]
 
-(4/11)
-Network Connection:
-enp0s3 eth 10.0.2.15/24 (from dhcp)
-enp0s8 192.168.56.100/24 (static)
+Jalankan instance Server Ubuntu
 
-Cara merubah enp0s8 menjadi static
-- Edit IPv4 [ENTER]
-- IPv4 Method = Manual [ENTER]
-    Subnet: 192.168.56.0/24
-    Address: 192.168.56.100
-    Gateway: 10.0.2.2
-    Pilih "Save"
-    [ENTER]
+Pilih "Install Ubuntu Server" [ENTER]
+Language: English [ENTER]
+Country, teritory or area: United States [ENTER]
+Detect keyboard layout? <NO> [ENTER]
+Country of origin for the keyboard: English (US) [ENTER]
+Keyboard layout: English (US) [ENTER]
 
-Pilih "Done"
-[ENTER]
+Primary network interface: enp0s3 [ENTER]
 
-(5/11)
-Pilih "Done"
-[ENTER]
+Hostname: ubuntu-server <Continue> [ENTER]
+Full name for the new user: ubuntu <Continue> [ENTER]
+Username for your account: ubuntu <Continue> [ENTER]
+Choose a password for the new user: ubuntu <Continue? [ENTER]
+Re-enter password to verify: ubuntu <Continue> [ENTER]
 
-(6/11)
-Pilih "Done"
-[ENTER]
+Use weak password? <Yes> [ENTER]
 
-(7/11)
-Filesystem setup:
-Pilih "Use An Entire Disk"
-[ENTER]
+Is this time zone correct? <Yes> [ENTER]
 
-Choose the disk to install to:
-Pilih "VBOX_HARDDISK_VBxxxxxxxx-xxxxxxxx"
-[ENTER]
+Partitioning method: Guided - use entire disk [ENTER]
+Select disk to parition: SCSI3 (0,0,0) (sda) [ENTER]
+Write the changes to disks? <Yes> [ENTER]
 
-File System Summary
-Pilih "Done"
-[ENTER]
+Installing the system...
 
-Are you sure you want to continue?
-Pilih "continue"
-[ENTER]
+HTTP proxy information: <Continue> [ENTER]
 
-Profile setup:
-Your name: ubuntu
-Your server's name: ubuntu-server
-Pick a username: ubuntu
-Choose a password: ubuntu
-Confirm your password: ubuntu
-Import SSH identity: from GitHub (kalau punya)
-Pilih "Done"
-[ENTER]
+How do you want to manage upgrades on this system? No automatic updates [ENTER]
 
-Featured Server Snaps:
-Pilih "Done"
-[ENTER]
+Choose software to install: (pilih dengan menekan spasi)
+[ ] DNS server
+[*] LAMP server
+[ ] Mail server
+[ ] PostgreSQL database
+[ ] Print server
+[ ] Samba file server
+[*] OpenSSH server
+<Continue> [ENTER]
 
-Tunggu proses instalasi hingga selesai
+Select and install software (tunggu proses instalasi ini sampai selesai)
 
-Pilih "Reboot Now"
-[ENTER]
+Install the GRUB boot loader to the master boot record? <Yes> [ENTER]
 
-Please remove the installation medium, then press ENTER:
-[ENTER]
+Installation complete <Continue> [ENTER]
 
-Login
-ubuntu-server login: ubuntu
-Password: ubuntu
+-------------------------------------------------------------------------------
 
-Check ip address interface
+
+[VIDEO PART 2]
+## Konfigurasi Jaringan, Remote SSH dan Membuat User Baru
+-------------------------------------------------------------------------------
+### Konfigurasi Jaringan
+Login dengan
+Username: ubuntu [ENTER]
+Password: ubuntu [ENTER]
+
+Cek ip address dengan cara
 $ ip a s
 
-Check ping ke google.com
-$ ping -c 3 google.com
+Buat konfigurasi static IP Address untuk interface enp0s8
+$ sudo nano /etc/netplan/01-netcfg.yaml
 
-Check ping ke network vboxnet0
-$ ping -c 3 192.168.56.1
+Tambahkan mirip seperti di bawah ini
+...
+...
+...
+    enp0s3:
+      dhcp4: yes
+    enp0s8:
+      addresses: [192.168.56.100/24]
+      gateway4: 10.0.2.2
+      dhcp4: false
 
-Check ping ke host ip
-$ ping -c 3 192.168.56.3
 
-Lakukan juga pengecekan dari host ke ubuntu-server ip
-$ ping -c 3 192.168.56.100
+Simpan dengan cara CTRL+0 kemudian [ENTER]
+Exit dengan cara CTRL+X
+
+Aplikasikan perubahan yang sudah kita buat dengan cara
+$ sudo netplan apply
+
+Cek kembali ip address interface dengan cara
+$ ip a s
+
+Perhatikan interface enp0s8, apakah sudah memiliki ip address?
+Harus 192.168.56.100
+
+Lalu coba saling ping antara Host dengan Server Ubuntu
 
 
-## Membuat Client
+### Konfigurasi Remote SSH
+Bisa menggunakan Bitvide SSH Client untuk Windows.
+Konfigurasinya sebagai berikut,
+Server
+    Host: 192.168.56.100
+    Port: 22
+
+Authentication
+    Username: ubuntu
+
+Lalu klik tombol [Login]
+
+Apabila diminta password, masukkan ubuntu
 
 
-# Management Users & Instalasi OwnCloud
+Untuk yang mengguakan Terminal / CMDER / GIT CMD
+$ ssh ubuntu@192.168.56.100 -p 22
 
-## Membuat User Baru pada Server
 
-referensi:
-https://www.digitalocean.com/community/tutorials/how-to-create-a-sudo-user-on-ubuntu-quickstart
-
+### Membuat User Baru
+Untuk membuat user baru, masukkan perintah
 $ sudo adduser rizqi
 
 Enter new UNIX password: rizqi
 Retype new UNIX password: rizqi
-passwd: password updated successfully
-Changing the user information for rizqi
-Enter the new value, or press ENTER for the default
-    Full Name []:
-    Room Number []:
-    Work Phone []:
-    Home Phone []:
-    Other []:
-Is the information correct? [Y/n] Y
 
+Selanjutnya memasukkan user rizqi agar dapat menggunakan sudo
 $ sudo usermod -aG sudo rizqi
 
-Cek apakah rizqi sudah masuk group sudo dengan perintah,
+Cek apakah user rizqi sudah masuk ke dalam group sudo
 $ groups rizqi
 
+Apabila hasilnya seperti di bawah
+rizqi: rizqi sudo
+Artinya user rizqi sudah dapat menggunakan sudo
 
-## Masuk Sebagai User Baru
-
+Selanjutnya masuk ke server dengan user rizqi
 $ su - rizqi
+Password: rizqi
 
-lakukan pengetesan sudo
+Apabila mengeluarkan hasil seperti di bawah
+rizqi@ubuntu-server$
+Artinya sudah berhasil masuk dengan user rizqi
 
-$ sudo ls -la /root
+-------------------------------------------------------------------------------
 
 
-## Memasang Web Server pada User Baru
+[VIDEO PART 3]
+## Memasang Cloud Apps pada User Baru (ownCloud)
+-------------------------------------------------------------------------------
+### Menambahkan repository ownCloud
 
-### Modifikasi Repository
+Pertama-tama kita perlu mendownload keyring dan memasukkannya ke dalam repository
+$ curl https://download.owncloud.org/download/repositories/10.0/ubuntu_18.04/release.key | sudo apt-key add -
 
-$ sudo vim /etc/apt/sources.list
+Lalu kita tambahkan alamat repository ownCloud ke dalam repository
+$ echo 'deb https://download.owncloud.org/download/repositories/10.0/ubuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/owncloud.list
 
-Tambahkan 'universe' pada setiap akhir baris repo
-
-deb http://kambing.ui.ac.id/ubuntu bionic main universe
-deb http://kambing.ui.ac.id/ubuntu bionic-security main universe
-deb http://kambing.ui.ac.id/ubuntu bionic-updates main universe
-
-### Instalasi Apache2
-
-referensi:
-https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04
-
+Setiap sehabis menambahkan repository kita perlu melakukan sinkronisasi ulang repository
 $ sudo apt update
 
-$ sudo apt install apache2 -y
-
-$ sudo apache2ctl configtest
-
-$ sudo systemctl restart apache2
-$ sudo systemctl status apache2
-
-exit dengan menekan tombol q
-
-Konfigurasi firewall (tidak perlu)
-
-$ sudo ufw app list
-
-$ sudo ufw app info "Apache Full"
-
-$ sudo ufw allow in "Apache Full"
-
-Buka di browser http://192.168.56.100
-Akan terbuka Default Page dari Apache2 Ubuntu
+Tunggu prosesnya sampai selesai
 
 
-### Instalasi PHP
-
+### Memasang PHP Module
+Instalasi php module dengan cara mengcopy perintah di bawah
 $ sudo apt install php libapache2-mod-php php-mysql php-bz2 php-curl php-gd php-imagick php-intl php-mbstring php-xml php-zip -y
 
-$ sudo systemctl restart apache2
-$ sudo systemctl status apache2
 
-
-### Instalasi MySQL
-
-$ sudo apt install mysql-server -y
-
+### Membuat database, user, dan password MySQL untuk ownCloud
+Masuk ke dalam mysql shell
 $ sudo mysql
 
+Buat database baru dengan nama owncloud
 mysql> CREATE DATABASE owncloud;
 
-mysql> GRANT ALL ON owncloud.* to 'owncloud'@'localhost' IDENTIFIED BY 'owncloud';
+Buat username dan password untuk owncloud
+mysql> GRANT ALL ON owncloud.* to 'owncloud'@'localhost' IDENTIFIED by 'owncloud';
 
 mysql> FLUSH PRIVILEGES;
 
 mysql> exit
 
-$ sudo apt install phpmyadmin
 
-Apabila keluar dialog dengan background pink pilih
-[*] Apache2
-<Yes>
-
-dbconfig-common?
-<Yes>
-
-## Memasang Cloud Apps pada User Baru (ownCloud)
-
-referensi:
-https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-owncloud-on-ubuntu-18-04
-
-$ curl https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/Release.key | sudo apt-key add -
-
-$ echo 'deb https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/owncloud.list
-
-$ sudo apt update
-
-Install ownCloud
-
+### Memasang ownCloud
+Pasang ownCloud dengan perintah di bawah
 $ sudo apt install owncloud-files -y
 
-Periksa apakah ownCloud sudah berhasil diinstal
+Periksa apakah ownCloud berhasil diinstal
+$ sudo ls -la /var/www/
 
-$ sudo ls -la /var/www/owncloud
+Selanjutnya merubah DocumentRoot,
+$ sudo nano /etc/apache2/sites-enabled/000-default.conf
 
-Rubah DocumentRoot yang ada di /etc/apache2/sites-enabled/000-default.conf
+Cari bagian DocumentRoot /var/www/html
+Rubah menjadi DocumentRoot /var/www/owncloud
 
-$ sudo sed -i 's/html/owncloud/g' /etc/apache2/sites-enabled/000-default.conf
-
-$ sudo apache2ctl configtest
-Syntax OK
-
+Restart apache web server terlebih dahulu
 $ sudo systemctl restart apache2
 
-Buka browser http://192.168.56.100
-Maka akan terbuka tampilan ownCloud X
-Masukkan data-data yang diperlukan
+Sekarang buka browser dan kunjungi alamat http://192.168.56.100
+Apabila berhasil akan keluar landing page dari ownCloud.
+Disini kita akan melakukan konfigurasi awal.
 
+Create an admin account
 username: rizqi
 password: rizqi
-database user: owncloud
-database password: owncloud
-database name: owncloud
+
+Data folder dibiarkan saja /var/www/owncloud/data
+
+Database user: owncloud
+Database pass: owncloud
+Datavase name: owncloud
 localhost
+
+Tekan tombol [FINISH]
+
+
+-------------------------------------------------------------------------------
+
+
+Regards,
+Rizqi Nur Assyaufi
+https://bandithijo.com
