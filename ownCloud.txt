@@ -186,7 +186,7 @@ Pertama-tama kita perlu mendownload keyring dan memasukkannya ke dalam repositor
 $ curl https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/Release.key | sudo apt-key add -
 
 Lalu kita tambahkan alamat repository ownCloud ke dalam repository
-$ echo 'deb http://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/owncloud.list
+$ echo 'deb https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/owncloud.list
 
 Setiap sehabis menambahkan repository kita perlu melakukan sinkronisasi ulang repository
 $ sudo apt update
