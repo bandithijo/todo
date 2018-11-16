@@ -130,25 +130,6 @@ Harus 192.168.56.100
 Lalu coba saling ping antara Host dengan Server Ubuntu
 
 
-### Konfigurasi Remote SSH
-Bisa menggunakan Bitvide SSH Client untuk Windows.
-Konfigurasinya sebagai berikut,
-Server
-    Host: 192.168.56.100
-    Port: 22
-
-Authentication
-    Username: ubuntu
-
-Lalu klik tombol [Login]
-
-Apabila diminta password, masukkan ubuntu
-
-
-Untuk yang mengguakan Terminal / CMDER / GIT CMD
-$ ssh ubuntu@192.168.56.100 -p 22
-
-
 ### Membuat User Baru
 Untuk membuat user baru, masukkan perintah
 $ sudo adduser rizqi
@@ -166,13 +147,30 @@ Apabila hasilnya seperti di bawah
 rizqi: rizqi sudo
 Artinya user rizqi sudah dapat menggunakan sudo
 
-Selanjutnya masuk ke server dengan user rizqi
-$ su - rizqi
-Password: rizqi
+
+### Konfigurasi Remote SSH
+Bisa menggunakan Bitvide SSH Client untuk Windows.
+Konfigurasinya sebagai berikut,
+Server
+    Host: 192.168.56.100
+    Port: 22
+
+Authentication
+    Username: rizqi
+
+Lalu klik tombol [Login]
+
+Apabila diminta password, masukkan ubuntu
+
+
+Untuk yang mengguakan Terminal / CMDER / GIT CMD
+$ ssh rizqi@192.168.56.100 -p 22
+
 
 Apabila mengeluarkan hasil seperti di bawah
 rizqi@ubuntu-server$
 Artinya sudah berhasil masuk dengan user rizqi
+
 
 -------------------------------------------------------------------------------
 
