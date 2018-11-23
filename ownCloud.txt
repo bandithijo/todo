@@ -197,6 +197,12 @@ Instalasi php module dengan cara mengcopy perintah di bawah
 $ sudo apt install php libapache2-mod-php php-mysql php-bz2 php-curl php-gd php-imagick php-intl php-mbstring php-xml php-zip -y
 
 
+### Memasang PHPMYADMIN
+$ sudo apt install phpmyadmin
+
+Lalu konfigurasi password untuk akun root
+$ sudo mysql_sequre_installation
+
 ### Membuat database, user, dan password MySQL untuk ownCloud
 Masuk ke dalam mysql shell
 $ sudo mysql
