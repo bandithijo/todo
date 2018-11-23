@@ -200,8 +200,6 @@ $ sudo apt install php libapache2-mod-php php-mysql php-bz2 php-curl php-gd php-
 ### Memasang PHPMYADMIN
 $ sudo apt install phpmyadmin
 
-Lalu konfigurasi password untuk akun root
-$ sudo mysql_sequre_installation
 
 Apabila tidak berhasil, gunakan cara di bawah
 $ sudo mysql
