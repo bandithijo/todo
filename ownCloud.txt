@@ -171,7 +171,6 @@ Apabila mengeluarkan hasil seperti di bawah
 rizqi@ubuntu-server$
 Artinya sudah berhasil masuk dengan user rizqi
 
-
 -------------------------------------------------------------------------------
 
 
