@@ -223,20 +223,9 @@ Buka browser https:192.168.56.100/phpmyadmin
 
 login root dan password root
 
-### Membuat database, user, dan password MySQL untuk ownCloud
-Masuk ke dalam mysql shell
-$ sudo mysql
-
-Buat database baru dengan nama owncloud
-mysql> CREATE DATABASE owncloud;
-
-Buat username dan password untuk owncloud
-mysql> GRANT ALL ON owncloud.* to 'owncloud'@'localhost' IDENTIFIED by 'owncloud';
-
-mysql> FLUSH PRIVILEGES;
-
-mysql> exit
-
+Buat database baru dengan menggunakan phpmyadmin
+Beri nama database name: owncloud
+Tidak usah diberikan tabel
 
 ### Memasang ownCloud
 Pasang ownCloud dengan perintah di bawah
