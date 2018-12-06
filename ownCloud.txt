@@ -199,8 +199,21 @@ $ sudo apt install php libapache2-mod-php php-mysql php-bz2 php-curl php-gd php-
 ### Memasang PHPMYADMIN
 $ sudo apt install phpmyadmin
 
+Web server to reconfigure automatically
+[*] apache2
+[ ] lighttpd
+Pilih <Ok>
 
-Apabila tidak berhasil, gunakan cara di bawah
+Confgura database for phphmyadmin with dbconfig-common?
+Pilih <Yes>
+
+MySQL application password for phpmyadmin?
+isikan: phpmyadmin
+Pilih <Ok>
+Password confirmation: phpmyadmin
+Pilih <Ok>
+
+Selanjutnya konfigurasi akun root untuk mysql, gunakan cara di bawah
 $ sudo mysql
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 mysql> FLUSH PRIVILEGES;
