@@ -1,8 +1,6 @@
 ---
 layout: 'page'
 title: 'Petunjuk Proses Instalasi OwnCloud'
-author: 'BanditHijo'
-permalink: '/todo/'
 ---
 
 # ownCloud
