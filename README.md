@@ -1,3 +1,10 @@
+---
+layout: 'page'
+title: 'Petunjuk Proses Instalasi OwnCloud'
+author: 'BanditHijo'
+permalink: '/todo/'
+---
+
 # ownCloud
 
 File petunjuk proses instalasi ada di file [`ownCloud.txt`](https://raw.githubusercontent.com/bandithijo/todo/master/ownCloud.txt)
